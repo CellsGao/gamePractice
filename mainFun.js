@@ -1,38 +1,44 @@
-var imageFromPath=function(path){
+var imageFromPath = function (path) {
     var image = new Image()
     image.src = path
     return image
 }
 
-var Paddle=function(){
-    var image=imageFromPath('paddle.png')
-    var o={
-        image:image,
-        x:randomPosition(),
-        y:850,
-        speed:5,
+//随机产生位置
+var randomPosition = function () {
+    xPosition = Math.random() * 1000
+    xPosition = Math.floor(xPosition)
+    return xPosition
+}
+
+var Paddle = function () {
+    var image = imageFromPath('paddle.png')
+    var o = {
+        image: image,
+        x: randomPosition(),
+        y: 850,
+        speed: 5,
+    }
+    o.moveLeft = function () {
+        o.x -= o.speed
+    }
+    o.moveRight = function () {
+        o.x += o.speed
+    }
+    o.moveUp = function () {
+        o.y -= o.speed
+    }
+    o.moveDown = function () {
+        o.y += o.speed
     }
     return o
 }
 
-//随机产生位置
-var randomPosition = function () {
-    xPosition=Math.random()*1000
-    xPosition=Math.floor(xPosition) 
-    return xPosition
- }
-
-
-
-
-
-var _main=function(){
+var _main = function () {
     var canvas = document.querySelector('#id-canvas')
     var context = canvas.getContext('2d')
-    var paddle=Paddle()
-    
+    var paddle = Paddle()
     context.drawImage(paddle.image, paddle.x, paddle.y)
-    
     var leftPressed = false
     var rightPressed = false
     var upPressed = false
@@ -67,20 +73,15 @@ var _main=function(){
 
     setInterval(function () {
         if (leftPressed) {
-            paddle.x -= paddle.speed
+            paddle.moveLeft()
         } else if (rightPressed) {
-            paddle.x += paddle.speed
+            paddle.moveRight()
         } else if (upPressed) {
-            paddle.y -= paddle.speed
+            paddle.moveUp()
         } else if (downPressed) {
-            paddle.y += paddle.speed
+            paddle.moveDown()
         }
         context.clearRect(0, 0, canvas.width, canvas.height)
         context.drawImage(paddle.image, paddle.x, paddle.y)
-
     }, 1000 / 60)
-
-
 }
-
-_main()

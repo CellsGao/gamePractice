@@ -34,11 +34,26 @@ var Paddle = function () {
     return o
 }
 
-var _main = function () {
+var Guagame = function () {
+    var g = {}
     var canvas = document.querySelector('#id-canvas')
     var context = canvas.getContext('2d')
+    g.canvas = canvas
+    g.context = context
+    setInterval(function () {
+        //update
+        g.update()
+        //clear
+        context.clearRect(0,0,canvas.width,canvas.height)
+        //draw
+        g.draw()
+    }, 1000 / 60)
+    return g
+}
+
+var _main = function () {
     var paddle = Paddle()
-    context.drawImage(paddle.image, paddle.x, paddle.y)
+    var game = Guagame()
     var leftPressed = false
     var rightPressed = false
     var upPressed = false
@@ -71,7 +86,7 @@ var _main = function () {
         }
     })
 
-    setInterval(function () {
+    game.update = function () {
         if (leftPressed) {
             paddle.moveLeft()
         } else if (rightPressed) {
@@ -81,7 +96,10 @@ var _main = function () {
         } else if (downPressed) {
             paddle.moveDown()
         }
-        context.clearRect(0, 0, canvas.width, canvas.height)
-        context.drawImage(paddle.image, paddle.x, paddle.y)
-    }, 1000 / 60)
+    }
+    game.draw = function () {
+        game.context.drawImage(paddle.image, paddle.x, paddle.y)
+    }
 }
+
+_main()
